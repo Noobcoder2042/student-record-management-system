@@ -1,8 +1,31 @@
-# React + Vite
+# Student Record Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+A simple web application for managing student records. Users can add, edit, delete, and view student records, with options to filter and search based on names and enrollment status.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+
+- **Add New Student Records**: Users can add new student records using a form.
+- **Edit Existing Records**: Edit student details by clicking the "Edit" button on each record.
+- **Delete Records**: Remove student records from the list.
+- **View All Records**: Display student records in a responsive table.
+- **Search and Filter**:
+  - Search by name.
+  - Filter by enrollment status (Active/Inactive).
+- **Local Storage Integration**:
+  - Store records in local storage to persist data across sessions.
+  - Retrieve student records on page load.
+
+## Student Record Fields
+
+- **ID**: Auto-generated identifier.
+- **Name**: Text input for student name.
+- **Age**: Numeric input for student age.
+- **Grade**: Dropdown selection (A, B, C, D, F).
+- **Enrollment Status**: Checkbox for active/inactive status.
+
+## Technologies Used
+
+- **React**: JavaScript library for building user interfaces.
+- **Material-UI**: UI component library for styling and responsiveness.
