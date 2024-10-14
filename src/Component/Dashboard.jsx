@@ -8,14 +8,24 @@ import {
   CardContent,
   Grid,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
-import SearchAndFilter from "./SearchAndFilter"; // Keep the SearchAndFilter component
+import SearchAndFilter from "./SearchAndFilter";
 import StudentForm from "./StudentForm";
 import StudentTable from "./StudentTable";
-import StudentFilter from "./StudentFilter"; // Import the StudentFilter component
+import StudentFilter from "./StudentFilter"; // Ensure you have imported StudentFilter correctly
 import AddIcon from "@mui/icons-material/Add";
-import Tooltip from "@mui/material/Tooltip";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip as MUIChartTooltip,
+} from "recharts";
 
 const theme = createTheme({
   palette: {
@@ -30,22 +40,68 @@ const theme = createTheme({
   },
 });
 
+const cardStyle = {
+  bgcolor: "transparent",
+  borderRadius: 4,
+  border: "1px solid transparent",
+  background: "linear-gradient(45deg, #2196F3, #21CBF3)", // Gradient background
+  backgroundClip: "padding-box",
+  position: "relative",
+  transition: "0.3s ease", // Smooth transition for hover effects
+
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: "8px",
+    background: "linear-gradient(45deg, #ff9800, #ff5722)", // Gradient border
+    zIndex: -1,
+    filter: "blur(8px)", // Optional: Blur for the border
+    boxShadow: "0 0 0 rgba(255, 152, 0, 0)", // Initial glow off
+    transition: "0.3s ease", // Smooth transition for glow effect
+  },
+
+  "&:hover::before": {
+    boxShadow: "0 0 20px rgba(255, 152, 0, 0.7)", // Glowing border effect on hover
+  },
+
+  "&:hover": {
+    boxShadow: "0 0 20px rgba(33, 150, 243, 0.5)", // Glowing effect on hover
+  },
+};
+
 const Dashboard = () => {
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState(""); // State for the status filter
+  const [statusFilter, setStatusFilter] = useState(""); // Initialize status filter
   const [open, setOpen] = useState(false);
   const [currentStudent, setCurrentStudent] = useState(null);
 
+  // Fetch students from localStorage or use demo data
   useEffect(() => {
     const storedStudents = JSON.parse(localStorage.getItem("students")) || [];
-    setStudents(storedStudents);
-    setFilteredStudents(storedStudents);
+
+    if (storedStudents.length === 0) {
+      const demoData = [
+        { id: 1, name: "Rohit Sharma", age: 22, grade: "A", isActive: true },
+        { id: 2, name: "Payel Roy", age: 19, grade: "B", isActive: false },
+        { id: 3, name: "Suresh Kumar", age: 25, grade: "C", isActive: true },
+      ];
+      localStorage.setItem("students", JSON.stringify(demoData));
+      setStudents(demoData);
+      setFilteredStudents(demoData);
+    } else {
+      setStudents(storedStudents);
+      setFilteredStudents(storedStudents);
+    }
   }, []);
 
   useEffect(() => {
-    handleSearchAndFilter(); // Call search and filter whenever dependencies change
+    handleSearchAndFilter(); // Update filtered students based on search and filter
   }, [students, searchQuery, statusFilter]);
 
   const addStudent = (student) => {
@@ -104,17 +160,55 @@ const Dashboard = () => {
     setOpen(true);
   };
 
+  // Data for Pie Chart
+  const statusData = [
+    { name: "Active", value: students.filter((s) => s.isActive).length },
+    { name: "Inactive", value: students.filter((s) => !s.isActive).length },
+  ];
+
+  // Data for Bar Chart (Age Groups)
+  const ageGroups = [
+    { ageGroup: "0-10", count: students.filter((s) => s.age <= 10).length },
+    {
+      ageGroup: "11-20",
+      count: students.filter((s) => s.age > 10 && s.age <= 20).length,
+    },
+    {
+      ageGroup: "21-30",
+      count: students.filter((s) => s.age > 20 && s.age <= 30).length,
+    },
+    { ageGroup: "31+", count: students.filter((s) => s.age > 30).length },
+  ];
+
+  // Data for Grade Distribution Chart
+  const getGradeDistribution = () => {
+    const gradeCounts = {};
+    students.forEach((student) => {
+      if (gradeCounts[student.grade]) {
+        gradeCounts[student.grade]++;
+      } else {
+        gradeCounts[student.grade] = 1;
+      }
+    });
+    return Object.entries(gradeCounts).map(([grade, count]) => ({
+      grade,
+      count,
+    }));
+  };
+
+  const gradeDistribution = getGradeDistribution();
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container>
-        <Typography variant="h5" mt={2} gutterBottom>
+        <Typography variant="h4" mt={2} gutterBottom>
           Student Record Management System
         </Typography>
 
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
-            <Card>
+            <Card sx={cardStyle}>
               <CardContent>
                 <Typography variant="h6">Total Students</Typography>
                 <Typography variant="h3">{students.length}</Typography>
@@ -123,7 +217,7 @@ const Dashboard = () => {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <Card>
+            <Card sx={cardStyle}>
               <CardContent>
                 <Typography variant="h6">Active Students</Typography>
                 <Typography variant="h3">
@@ -134,7 +228,7 @@ const Dashboard = () => {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <Card>
+            <Card sx={cardStyle}>
               <CardContent>
                 <Typography variant="h6">Inactive Students</Typography>
                 <Typography variant="h3">
@@ -155,11 +249,12 @@ const Dashboard = () => {
         >
           {/* Student Status Filter component */}
           <StudentFilter
-            statusFilter={statusFilter}
-            setStatusFilter={setStatusFilter}
+            filter={statusFilter} // Pass statusFilter as filter
+            setFilter={setStatusFilter} // Pass setStatusFilter as setFilter
           />
+
           {/* Search and Filter component */}
-          <Box>
+          <Box sx={{ minWidth: "20%", display: "flex", justifyContent: "end" }}>
             <SearchAndFilter
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -204,6 +299,63 @@ const Dashboard = () => {
           editStudent={openEditModal}
           deleteStudent={deleteStudent}
         />
+
+        <Container sx={{ marginTop: 3 }}>
+          <Typography variant="h5" mt={5} gutterBottom align="center">
+            Student Record Overview
+          </Typography>
+
+          {/* Charts Section */}
+          <Grid
+            container
+            spacing={2}
+            mt={2}
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <Grid item xs={12} md={4}>
+              <BarChart width={300} height={300} data={ageGroups}>
+                <XAxis dataKey="ageGroup" />
+                <YAxis />
+                <Bar dataKey="count" fill="#8884d8" />
+                <MUIChartTooltip />
+              </BarChart>
+              <Typography align="center">Age Groups</Typography>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <PieChart width={300} height={300}>
+                <Pie
+                  data={statusData}
+                  dataKey="value"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  label
+                >
+                  {statusData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={index === 0 ? "#82ca9d" : "#ff8042"}
+                    />
+                  ))}
+                </Pie>
+                <MUIChartTooltip />
+              </PieChart>
+              <Typography align="center">Status Distribution</Typography>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <BarChart width={300} height={300} data={gradeDistribution}>
+                <XAxis dataKey="grade" />
+                <YAxis />
+                <Bar dataKey="count" fill="#8884d8" />
+                <MUIChartTooltip />
+              </BarChart>
+              <Typography align="center">Grade Distribution</Typography>
+            </Grid>
+          </Grid>
+        </Container>
       </Container>
     </ThemeProvider>
   );

@@ -17,69 +17,84 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit"; // Edit icon
 import DeleteIcon from "@mui/icons-material/Delete"; // Delete icon
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"; // Up arrow icon
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward"; // Down arrow icon
 
 const StudentTable = ({ students, editStudent, deleteStudent }) => {
-  const [openDialog, setOpenDialog] = useState(false); // State to control the dialog visibility
-  const [studentToDelete, setStudentToDelete] = useState(null); // State to store the student to be deleted
+  const [openDialog, setOpenDialog] = useState(false);
+  const [studentToDelete, setStudentToDelete] = useState(null);
+  const [sortConfig, setSortConfig] = useState({
+    key: "name",
+    direction: "ascending",
+  });
 
   const handleDeleteClick = (student) => {
     setStudentToDelete(student);
-    setOpenDialog(true); // Open dialog when delete button is clicked
+    setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
-    setOpenDialog(false); // Close the dialog
-    setStudentToDelete(null); // Clear the student to delete
+    setOpenDialog(false);
+    setStudentToDelete(null);
   };
 
   const handleConfirmDelete = () => {
     if (studentToDelete) {
-      deleteStudent(studentToDelete.id); // Call delete function with the student's ID
+      deleteStudent(studentToDelete.id);
     }
-    handleCloseDialog(); // Close the dialog after deletion
+    handleCloseDialog();
   };
+
+  const requestSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedStudents = [...students].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === "ascending" ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === "ascending" ? 1 : -1;
+    }
+    return 0;
+  });
 
   return (
     <Paper elevation={3} sx={{ borderRadius: "8px", overflow: "hidden" }}>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell
-              style={{
-                backgroundColor: "#1e1e1e",
-                color: "#fff",
-                fontWeight: "bold",
-              }}
-            >
-              ID
-            </TableCell>
-            <TableCell
-              style={{
-                backgroundColor: "#1e1e1e",
-                color: "#fff",
-                fontWeight: "bold",
-              }}
-            >
-              Name
-            </TableCell>
-            <TableCell
-              style={{
-                backgroundColor: "#1e1e1e",
-                color: "#fff",
-                fontWeight: "bold",
-              }}
-            >
-              Age
-            </TableCell>
-            <TableCell
-              style={{
-                backgroundColor: "#1e1e1e",
-                color: "#fff",
-                fontWeight: "bold",
-              }}
-            >
-              Grade
-            </TableCell>
+            {["id", "name", "age", "grade"].map((header) => (
+              <TableCell
+                key={header}
+                style={{
+                  backgroundColor: "#1e1e1e",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  cursor: "pointer", // Add pointer cursor for sort indication
+                }}
+                onClick={() => requestSort(header)}
+              >
+                {header.charAt(0).toUpperCase() + header.slice(1)}{" "}
+                {/* Capitalize header */}
+                {sortConfig.key === header &&
+                  (sortConfig.direction === "ascending" ? (
+                    <ArrowUpwardIcon
+                      fontSize="small"
+                      sx={{ marginLeft: "8px", verticalAlign: "middle" }}
+                    />
+                  ) : (
+                    <ArrowDownwardIcon
+                      fontSize="small"
+                      sx={{ marginLeft: "8px", verticalAlign: "middle" }}
+                    />
+                  ))}
+              </TableCell>
+            ))}
             <TableCell
               style={{
                 backgroundColor: "#1e1e1e",
@@ -101,7 +116,7 @@ const StudentTable = ({ students, editStudent, deleteStudent }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {students.map((student) => (
+          {sortedStudents.map((student) => (
             <TableRow key={student.id}>
               <TableCell>{student.id}</TableCell>
               <TableCell>{student.name}</TableCell>
@@ -111,17 +126,17 @@ const StudentTable = ({ students, editStudent, deleteStudent }) => {
               <TableCell>
                 <Tooltip title="Edit Student" arrow>
                   <IconButton
-                    color="success" // Use 'success' for green color
+                    color="success"
                     onClick={() => editStudent(student)}
-                    sx={{ marginRight: "8px" }} // Add margin between buttons
+                    sx={{ marginRight: "8px" }}
                   >
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Delete Student" arrow>
                   <IconButton
-                    color="error" // Use 'error' for red color
-                    onClick={() => handleDeleteClick(student)} // Open dialog on delete
+                    color="error"
+                    onClick={() => handleDeleteClick(student)}
                   >
                     <DeleteIcon />
                   </IconButton>
