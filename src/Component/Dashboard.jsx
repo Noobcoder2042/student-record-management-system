@@ -14,7 +14,7 @@ import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import SearchAndFilter from "./SearchAndFilter";
 import StudentForm from "./StudentForm";
 import StudentTable from "./StudentTable";
-import StudentFilter from "./StudentFilter"; // Ensure you have imported StudentFilter correctly
+import StudentFilter from "./StudentFilter";
 import AddIcon from "@mui/icons-material/Add";
 import {
   PieChart,
@@ -44,10 +44,10 @@ const cardStyle = {
   bgcolor: "transparent",
   borderRadius: 4,
   border: "1px solid transparent",
-  background: "linear-gradient(45deg, #2196F3, #21CBF3)", // Gradient background
+  background: "linear-gradient(45deg, #2196F3, #21CBF3)", 
   backgroundClip: "padding-box",
   position: "relative",
-  transition: "0.3s ease", // Smooth transition for hover effects
+  transition: "0.3s ease", 
 
   "&::before": {
     content: '""',
@@ -57,19 +57,19 @@ const cardStyle = {
     right: 0,
     bottom: 0,
     borderRadius: "8px",
-    background: "linear-gradient(45deg, #ff9800, #ff5722)", // Gradient border
+    background: "linear-gradient(45deg, #ff9800, #ff5722)", 
     zIndex: -1,
-    filter: "blur(8px)", // Optional: Blur for the border
-    boxShadow: "0 0 0 rgba(255, 152, 0, 0)", // Initial glow off
-    transition: "0.3s ease", // Smooth transition for glow effect
+    filter: "blur(8px)", 
+    boxShadow: "0 0 0 rgba(255, 152, 0, 0)", 
+    transition: "0.3s ease", 
   },
 
   "&:hover::before": {
-    boxShadow: "0 0 20px rgba(255, 152, 0, 0.7)", // Glowing border effect on hover
+    boxShadow: "0 0 20px rgba(255, 152, 0, 0.7)",
   },
 
   "&:hover": {
-    boxShadow: "0 0 20px rgba(33, 150, 243, 0.5)", // Glowing effect on hover
+    boxShadow: "0 0 20px rgba(33, 150, 243, 0.5)", 
   },
 };
 
@@ -77,7 +77,7 @@ const Dashboard = () => {
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState(""); // Initialize status filter
+  const [statusFilter, setStatusFilter] = useState(""); 
   const [open, setOpen] = useState(false);
   const [currentStudent, setCurrentStudent] = useState(null);
 
@@ -87,9 +87,9 @@ const Dashboard = () => {
 
     if (storedStudents.length === 0) {
       const demoData = [
-        { id: 1, name: "Rohit Sharma", age: 22, grade: "A", isActive: true },
-        { id: 2, name: "Payel Roy", age: 19, grade: "B", isActive: false },
-        { id: 3, name: "Suresh Kumar", age: 25, grade: "C", isActive: true },
+        { id: 7528973001174, name: "Rohit Sharma", age: 22, grade: "A", isActive: true },
+        { id: 1828773042244, name: "Payel Roy", age: 19, grade: "B", isActive: false },
+        { id: 4428973022276, name: "Suresh Kumar", age: 25, grade: "C", isActive: true },
       ];
       localStorage.setItem("students", JSON.stringify(demoData));
       setStudents(demoData);
@@ -101,7 +101,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    handleSearchAndFilter(); // Update filtered students based on search and filter
+    handleSearchAndFilter(); 
   }, [students, searchQuery, statusFilter]);
 
   const addStudent = (student) => {
@@ -249,8 +249,8 @@ const Dashboard = () => {
         >
           {/* Student Status Filter component */}
           <StudentFilter
-            filter={statusFilter} // Pass statusFilter as filter
-            setFilter={setStatusFilter} // Pass setStatusFilter as setFilter
+            filter={statusFilter} 
+            setFilter={setStatusFilter} 
           />
 
           {/* Search and Filter component */}

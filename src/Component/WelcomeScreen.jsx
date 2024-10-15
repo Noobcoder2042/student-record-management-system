@@ -2,18 +2,17 @@ import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { styled } from "@mui/system";
 
-// Ensure to adjust the path based on your project's structure
-import studentImage from "../assets/student.png"; // Import the image
+import studentImage from "../assets/student.png";
 
 const ProceedButton = styled(Button)({
-  backgroundColor: "#00C49F", // Custom color for the button
+  backgroundColor: "#00C49F",
   color: "#fff",
   "&:hover": {
-    backgroundColor: "#009688", // Slightly darker on hover
+    backgroundColor: "#009688",
   },
-  padding: "10px 20px", // Increased padding for a larger button
-  borderRadius: "30px", // Rounded corners
-  fontSize: "1.2rem", // Larger font size for better readability
+  padding: "10px 20px",
+  borderRadius: "30px",
+  fontSize: "1.2rem",
 });
 
 const WelcomeScreen = ({ onProceed }) => {
@@ -26,9 +25,9 @@ const WelcomeScreen = ({ onProceed }) => {
         justifyContent: "center",
         height: "100vh",
         textAlign: "center",
-        backgroundColor: "#121212", // Dark mode background
-        color: "#fff", // Light text for contrast
-        padding: 3, // Add some padding around the content
+        backgroundColor: "#121212",
+        color: "#fff",
+        padding: 3,
       }}
     >
       <Box
@@ -36,12 +35,12 @@ const WelcomeScreen = ({ onProceed }) => {
         src={studentImage}
         alt="Student"
         sx={{
-          width: { xs: "80%", sm: "50%", md: "35%" }, // Responsive image size
-          maxWidth: 250, // Max width for larger screens
-          marginBottom: 3, // Space below the image
-          transition: "transform 0.5s ease", // Smooth scaling effect on hover
+          width: { xs: "80%", sm: "50%", md: "35%" },
+          maxWidth: 250,
+          marginBottom: 3,
+          transition: "transform 0.5s ease",
           "&:hover": {
-            transform: "scale(1.05)", // Scale up slightly on hover
+            transform: "scale(1.05)",
           },
         }}
       />
@@ -50,8 +49,8 @@ const WelcomeScreen = ({ onProceed }) => {
         variant="h3"
         gutterBottom
         sx={{
-          fontWeight: "bold", // Bolder heading
-          fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" }, // Responsive text size
+          fontWeight: "bold",
+          fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
         }}
       >
         Welcome to the Student Record System
@@ -60,9 +59,9 @@ const WelcomeScreen = ({ onProceed }) => {
         variant="body1"
         gutterBottom
         sx={{
-          fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" }, // Responsive text size
-          marginBottom: 4, // Increased space below the subheading
-          color: "rgba(255, 255, 255, 0.7)", // Slightly muted text color
+          fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" },
+          marginBottom: 4,
+          color: "rgba(255, 255, 255, 0.7)",
         }}
       >
         Designed and Developed by <strong>Rudra Chandra</strong>
@@ -72,8 +71,8 @@ const WelcomeScreen = ({ onProceed }) => {
         variant="contained"
         onClick={onProceed}
         sx={{
-          marginTop: 3, // Increased space above the button
-          transition: "all 0.3s ease", // Smooth transition for hover effects
+          marginTop: 3,
+          transition: "all 0.3s ease",
         }}
       >
         Get Started

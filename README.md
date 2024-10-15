@@ -29,3 +29,19 @@ A simple web application for managing student records. Users can add, edit, dele
 
 - **React**: JavaScript library for building user interfaces.
 - **Material-UI**: UI component library for styling and responsiveness.
+- **Recharts**: JavaScript library for rendering charts.
+
+## Getting Started
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/Noobcoder2042/student-record-management-system.git
+
+   ```
+
+2. cd student-record-management-system
+
+3. Install dependencies: npm i
+
+4. Start the application: npm start

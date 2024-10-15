@@ -15,10 +15,10 @@ import {
   Button,
   Tooltip,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit"; // Edit icon
-import DeleteIcon from "@mui/icons-material/Delete"; // Delete icon
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"; // Up arrow icon
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward"; // Down arrow icon
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 const StudentTable = ({ students, editStudent, deleteStudent }) => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -75,12 +75,11 @@ const StudentTable = ({ students, editStudent, deleteStudent }) => {
                   backgroundColor: "#1e1e1e",
                   color: "#fff",
                   fontWeight: "bold",
-                  cursor: "pointer", // Add pointer cursor for sort indication
+                  cursor: "pointer",
                 }}
                 onClick={() => requestSort(header)}
               >
                 {header.charAt(0).toUpperCase() + header.slice(1)}{" "}
-                {/* Capitalize header */}
                 {sortConfig.key === header &&
                   (sortConfig.direction === "ascending" ? (
                     <ArrowUpwardIcon
